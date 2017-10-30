@@ -1,4 +1,7 @@
-package com.gmail.bicycle;
+package dao.factories;
+
+import dao.interfaces.GroupDAO;
+import dao.interfaces.StudentDAO;
 
 public class JSONDAOFactory extends DAOFactory {
 

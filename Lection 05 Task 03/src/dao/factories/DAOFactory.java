@@ -1,4 +1,7 @@
-package com.gmail.bicycle;
+package dao.factories;
+
+import dao.interfaces.GroupDAO;
+import dao.interfaces.StudentDAO;
 
 public abstract class DAOFactory {
 	// List of DAO types supported by the factory

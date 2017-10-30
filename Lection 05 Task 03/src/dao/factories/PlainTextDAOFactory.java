@@ -1,7 +1,12 @@
-package com.gmail.bicycle;
+package dao.factories;
 
 import java.io.FileNotFoundException;
 import java.io.RandomAccessFile;
+
+import dao.interfaces.GroupDAO;
+import dao.interfaces.StudentDAO;
+import dao.realization.PlainTextGroupDAO;
+import dao.realization.PlainTextStudentDAO;
 
 public class PlainTextDAOFactory extends DAOFactory {
 	public static final String FILE_NAME = "group.txt";

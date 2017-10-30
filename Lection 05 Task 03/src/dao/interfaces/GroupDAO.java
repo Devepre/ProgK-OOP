@@ -1,6 +1,8 @@
-package com.gmail.bicycle;
+package dao.interfaces;
 
 import java.io.IOException;
+
+import com.gmail.bicycle.Group;
 
 public interface GroupDAO {
 	public void saveGroup(Group group) throws IOException;

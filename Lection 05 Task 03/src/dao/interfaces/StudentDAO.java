@@ -1,6 +1,8 @@
-package com.gmail.bicycle;
+package dao.interfaces;
 
 import java.io.IOException;
+
+import com.gmail.bicycle.Student;
 
 public interface StudentDAO {
 	public void saveStudent(Student student) throws IOException;
