@@ -3,8 +3,8 @@ package com.gmail.bicycle;
 import java.io.IOException;
 import java.util.Date;
 
-import dao.factories.DAOFactory;
-import dao.interfaces.GroupDAO;
+import com.gmail.bicycle.dao.factories.DAOFactory;
+import com.gmail.bicycle.dao.interfaces.GroupDAO;
 
 public class Main {
 

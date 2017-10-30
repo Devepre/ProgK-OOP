@@ -1,4 +1,4 @@
-package dao.interfaces;
+package com.gmail.bicycle.dao.interfaces;
 
 import java.io.IOException;
 

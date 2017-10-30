@@ -1,4 +1,4 @@
-package dao.realization;
+package com.gmail.bicycle.dao.realization;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,9 +8,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.gmail.bicycle.Student;
-
-import dao.factories.PlainTextDAOFactory;
-import dao.interfaces.StudentDAO;
+import com.gmail.bicycle.dao.factories.PlainTextDAOFactory;
+import com.gmail.bicycle.dao.interfaces.StudentDAO;
 
 //PlainTextStudentDAO implementation of the 
 //StudentDAO interface. This class can contain all
