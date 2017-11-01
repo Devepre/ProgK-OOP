@@ -81,9 +81,10 @@ public class JsonRealization extends JsonParser {
 
 		ArrayList<String> fieldNames = ReflectionHandler.getListOfSerializableFields(object);
 		ArrayList<String> fieldTypes = ReflectionHandler.getListOfSerializableTypes(object);
-		
-		if(fieldNames.isEmpty() || fieldTypes.isEmpty()) {
-			throw new IllegalArgumentException("This class can't be serialized - any of field doesn't marked to be serialized");
+
+		if (fieldNames.isEmpty() || fieldTypes.isEmpty()) {
+			throw new IllegalArgumentException(
+					"This class can't be serialized - any of field doesn't marked to be serialized");
 		}
 
 		for (int i = 0; i < fieldNames.size(); i++) {
@@ -126,8 +127,7 @@ public class JsonRealization extends JsonParser {
 			Date date = (Date) field.get(object);
 			value = date.toString();
 			writeStringValue(value);
-		}
-		if (type.equals("java.lang.String")) {
+		} else if (type.equals("java.lang.String")) {
 			value = (String) field.get(object);
 			writeStringValue(value);
 		}
@@ -275,10 +275,9 @@ public class JsonRealization extends JsonParser {
 		int index = 0;
 		for (String fieldName : fieldNames) {
 			Object value = fieldValues.get(index++);
-
 			Field field = ReflectionHandler.getField(currentClass, fieldName);
-
 			Class<?> typeValue = field.getType();
+			
 			if (typeValue.getName().equals("double")) {
 				value = Double.parseDouble((String) value);
 			} else if (typeValue.getName().equals("long")) {
@@ -293,18 +292,18 @@ public class JsonRealization extends JsonParser {
 				Class<?> arrayObjectClass = typeValue.getComponentType();
 				Constructor<?> arrayConstructor = arrayObjectClass.getConstructor();
 				ArrayList<Object> array = new ArrayList<Object>();
-
+				
 				for (String string : values) {
 					Object objOfArray = arrayConstructor.newInstance();
 					objOfArray = createObject(string, objOfArray.getClass());
 					array.add(objOfArray);
 				}
-
 				value = (Object[]) Array.newInstance(typeValue.getComponentType(), array.size());
 				for (int i = 0; i < ((Object[]) value).length; i++) {
 					((Object[]) value)[i] = array.get(i);
 				}
 			}
+			
 			field.setAccessible(true);
 			field.set(obj, value);
 		}
@@ -337,8 +336,8 @@ public class JsonRealization extends JsonParser {
 		return itmes;
 	}
 
-	//TODO following 2 methods should be optimized
-	//getListOfSerializableFieldNames and getListOfSerializableFieldValues
+	// TODO following 2 methods should be optimized
+	// getListOfSerializableFieldNames and getListOfSerializableFieldValues has almost the same code
 	private static ArrayList<String> getListOfSerializableFieldNames(String currentObject) {
 		ArrayList<String> fieldNames = new ArrayList<String>();
 		ArrayList<String> fieldValues = new ArrayList<String>();
