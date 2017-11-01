@@ -51,9 +51,9 @@ public class Main {
 		Group loadedGroup = new Group();
 		String fileName = "data.json";										
 		try {
-			JsonParser jsonParser = JsonParser.getParser(group);
-			jsonParser.serializeTo(fileName);
-			loadedGroup = (Group) jsonParser.deserializeFrom(fileName, loadedGroup.getClass());
+			JsonParser jsonParser = JsonParser.getParser();
+			jsonParser.serialize(group, fileName);
+			loadedGroup = (Group) jsonParser.deserialize(Group.class, fileName);			
 			System.out.println("Loaded group is:");
 			System.out.println(loadedGroup);
 			System.out.println();

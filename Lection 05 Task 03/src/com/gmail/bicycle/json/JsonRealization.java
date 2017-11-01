@@ -11,6 +11,8 @@ import java.io.Writer;
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,8 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class JsonRealization extends JsonParser {
-	private Object obj;
-	private OutputStream outputStream;
 	private Writer writer;
 	private Reader reader;
 
@@ -28,20 +28,13 @@ public class JsonRealization extends JsonParser {
 		super();
 	}
 
-	public JsonRealization(Object obj) throws IOException, ReflectiveOperationException, SecurityException {
-		if (obj == null) {
-			throw new IllegalArgumentException("Can't be null");
-		}
-		this.obj = obj;
-	}
-
 	@Override
-	public void serializeTo(String fileName) throws NoSuchFieldException, SecurityException, IllegalArgumentException,
-			IllegalAccessException, IOException {
+	public void serialize(Object obj, String fileName) throws NoSuchFieldException, SecurityException,
+			IllegalArgumentException, IllegalAccessException, IOException {
 		if (obj == null) {
 			throw new IllegalArgumentException("Nothing to serialize");
 		}
-		outputStream = new FileOutputStream(fileName);
+		OutputStream outputStream = new FileOutputStream(fileName);
 		writer = new PrintWriter(outputStream);
 		writeObject(obj);
 		writer.flush();
@@ -83,11 +76,15 @@ public class JsonRealization extends JsonParser {
 	}
 
 	private void writeObject(Object object) throws IOException, NoSuchFieldException, SecurityException,
-			IllegalArgumentException, IllegalAccessException {
+			IllegalArgumentException, IllegalAccessException, IllegalArgumentException {
 		writeString(JsonData.BEGIN.getValue());
 
 		ArrayList<String> fieldNames = ReflectionHandler.getListOfSerializableFields(object);
 		ArrayList<String> fieldTypes = ReflectionHandler.getListOfSerializableTypes(object);
+		
+		if(fieldNames.isEmpty() || fieldTypes.isEmpty()) {
+			throw new IllegalArgumentException("This class can't be serialized - any of field doesn't marked to be serialized");
+		}
 
 		for (int i = 0; i < fieldNames.size(); i++) {
 			String name = fieldNames.get(i);
@@ -212,9 +209,9 @@ public class JsonRealization extends JsonParser {
 	}
 
 	@Override
-	public Object deserializeFrom(String fileName, Class<?> objectClass) throws Exception {
+	public Object deserialize(Class<?> objectClass, String fileName) throws Exception {
 		if (fileName == null || fileName.isEmpty()) {
-			throw new IllegalArgumentException("Nothing to deserialize");
+			throw new IllegalArgumentException("Can't create unknown file");
 		}
 		Object obj = null;
 		reader = new BufferedReader(new FileReader(fileName));
@@ -263,56 +260,52 @@ public class JsonRealization extends JsonParser {
 		return obj;
 	}
 
-	private Object createObject(String currentObject, Class<?> currentClass) {
+	private Object createObject(String currentObject, Class<?> currentClass)
+			throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchFieldException, ParseException {
 		Object obj = null;
 
-		try {
-			//Class<?> currentClass = object.getClass();
-			Constructor<?> constructor = currentClass.getConstructor();
-			obj = constructor.newInstance();
+		Constructor<?> constructor = currentClass.getConstructor();
+		obj = constructor.newInstance();
 
-			ArrayList<String> fieldNames = getListOfSerializableFieldNames(currentObject);
-			ArrayList<String> fieldValues = getListOfSerializableFieldValues(currentObject);
+		ArrayList<String> fieldNames = getListOfSerializableFieldNames(currentObject);
+		ArrayList<String> fieldValues = getListOfSerializableFieldValues(currentObject);
 
-			int index = 0;
-			for (String fieldName : fieldNames) {
-				Object value = fieldValues.get(index++);
+		int index = 0;
+		for (String fieldName : fieldNames) {
+			Object value = fieldValues.get(index++);
 
-				Field field = ReflectionHandler.getField(currentClass, fieldName);
+			Field field = ReflectionHandler.getField(currentClass, fieldName);
 
-				Class<?> typeValue = field.getType();
-				if (typeValue.getName().equals("double")) {
-					value = Double.parseDouble((String) value);
-				} else if (typeValue.getName().equals("long")) {
-					value = Long.parseLong((String) value);
-				} else if (typeValue.getName().equals("boolean")) {
-					value = Boolean.parseBoolean((String) value);
-				} else if (typeValue.getName().equals("java.util.Date")) {
-					SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'EET' yyyy", Locale.ENGLISH);
-					value = sdf.parse((String) value);
-				} else if (typeValue.getName().startsWith("[")) {
-					ArrayList<String> values = parseArray(value);
-					Class<?> arrayObjectClass = typeValue.getComponentType();
-					Constructor<?> arrayConstructor = arrayObjectClass.getConstructor();
-					ArrayList<Object> array = new ArrayList<Object>();
+			Class<?> typeValue = field.getType();
+			if (typeValue.getName().equals("double")) {
+				value = Double.parseDouble((String) value);
+			} else if (typeValue.getName().equals("long")) {
+				value = Long.parseLong((String) value);
+			} else if (typeValue.getName().equals("boolean")) {
+				value = Boolean.parseBoolean((String) value);
+			} else if (typeValue.getName().equals("java.util.Date")) {
+				SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss 'EET' yyyy", Locale.ENGLISH);
+				value = sdf.parse((String) value);
+			} else if (typeValue.getName().startsWith("[")) {
+				ArrayList<String> values = parseArray(value);
+				Class<?> arrayObjectClass = typeValue.getComponentType();
+				Constructor<?> arrayConstructor = arrayObjectClass.getConstructor();
+				ArrayList<Object> array = new ArrayList<Object>();
 
-					for (String string : values) {
-						Object objOfArray = arrayConstructor.newInstance();
-						objOfArray = createObject(string, objOfArray.getClass());
-						//objOfArray = createObject(string, currentClass);
-						array.add(objOfArray);
-					}
-
-					value = (Object[]) Array.newInstance(typeValue.getComponentType(), array.size());
-					for (int i = 0; i < ((Object[]) value).length; i++) {
-						((Object[]) value)[i] = array.get(i);
-					}
+				for (String string : values) {
+					Object objOfArray = arrayConstructor.newInstance();
+					objOfArray = createObject(string, objOfArray.getClass());
+					array.add(objOfArray);
 				}
-				field.setAccessible(true);
-				field.set(obj, value);
+
+				value = (Object[]) Array.newInstance(typeValue.getComponentType(), array.size());
+				for (int i = 0; i < ((Object[]) value).length; i++) {
+					((Object[]) value)[i] = array.get(i);
+				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			field.setAccessible(true);
+			field.set(obj, value);
 		}
 		return obj;
 	}
