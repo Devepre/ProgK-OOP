@@ -7,9 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.gmail.bicycle.Student;
 import com.gmail.bicycle.dao.factories.PlainTextDAOFactory;
 import com.gmail.bicycle.dao.interfaces.StudentDAO;
+import com.gmail.bicycle.model.Student;
 
 //PlainTextStudentDAO implementation of the 
 //StudentDAO interface. This class can contain all

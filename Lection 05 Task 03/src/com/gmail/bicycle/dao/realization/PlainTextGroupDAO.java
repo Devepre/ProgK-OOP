@@ -3,13 +3,13 @@ package com.gmail.bicycle.dao.realization;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import com.gmail.bicycle.Group;
 import com.gmail.bicycle.GroupOutOfBoundsException;
-import com.gmail.bicycle.Student;
 import com.gmail.bicycle.dao.factories.DAOFactory;
 import com.gmail.bicycle.dao.factories.PlainTextDAOFactory;
 import com.gmail.bicycle.dao.interfaces.GroupDAO;
 import com.gmail.bicycle.dao.interfaces.StudentDAO;
+import com.gmail.bicycle.model.Group;
+import com.gmail.bicycle.model.Student;
 
 //PlainTextGroupDAO implementation of the 
 //GroupDAO interface. This class can contain all
