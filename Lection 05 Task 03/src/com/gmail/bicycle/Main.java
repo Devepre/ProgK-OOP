@@ -39,8 +39,8 @@ public class Main {
 		System.out.println("<<<File name used from PlainTextDAOFactory and JSONDAOFactory configuration>>>");
 		System.out.println();
 
-		DAOFactory plainTextFactory = DAOFactory.getDAOFactory(DAOFactory.PLAIN_TEXT);
-		GroupDAO groupDAO = plainTextFactory.getGroupDAO();
+		DAOFactory groupDAOFactory = DAOFactory.getDAOFactory(DAOFactory.PLAIN_TEXT);
+		GroupDAO groupDAO = groupDAOFactory.getGroupDAO();
 		try {
 			System.out.println("Saving group using Plain Text DAO method. Mode: adding to file if exist");
 			System.out.println("File name is: " + PlainTextDAOFactory.FILE_NAME);
@@ -53,15 +53,16 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		DAOFactory jsonFactory = DAOFactory.getDAOFactory(DAOFactory.JSON);
-		GroupDAO jsonGrpupDAO = jsonFactory.getGroupDAO();
+		//it's the only code to change provider from Plain text to JSON
+		groupDAOFactory = DAOFactory.getDAOFactory(DAOFactory.JSON);
+		groupDAO = groupDAOFactory.getGroupDAO();
 
 		try {
 			System.out.println("Saving group using JSON method");
 			System.out.println("File name is: " + JSONDAOFactory.FILE_NAME);
-			jsonGrpupDAO.saveGroup(group);
+			groupDAO.saveGroup(group);
 			System.out.println("Loading group using JSON method");
-			Group loadededJsonGroup = jsonGrpupDAO.loadGroup();
+			Group loadededJsonGroup = groupDAO.loadGroup();
 			System.out.println(loadededJsonGroup);
 		} catch (IOException e) {
 			e.printStackTrace();
