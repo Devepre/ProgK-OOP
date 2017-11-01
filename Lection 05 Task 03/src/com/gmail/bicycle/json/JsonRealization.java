@@ -99,9 +99,7 @@ public class JsonRealization extends JsonParser {
 				writeBooleanObject(object, name, type, isLastObject);
 			} else if (type.equals("long")) {
 				writeLongObject(object, name, type, isLastObject);
-			}
-
-			if (type.startsWith("[")) {
+			} else if (type.startsWith("[")) {
 				Object[] array = (Object[]) ReflectionHandler.getObjectFromObject(object, name);
 
 				writeBeginningOfStringValue(name);
@@ -213,6 +211,9 @@ public class JsonRealization extends JsonParser {
 		if (fileName == null || fileName.isEmpty()) {
 			throw new IllegalArgumentException("Can't create unknown file");
 		}
+		if (objectClass == null) {
+			throw new IllegalArgumentException("Need to specify Class type");
+		}
 		Object obj = null;
 		reader = new BufferedReader(new FileReader(fileName));
 		obj = readObject(objectClass);
@@ -254,7 +255,7 @@ public class JsonRealization extends JsonParser {
 		if (currentObject.length() > 0) {
 			obj = createObject(currentObject.toString(), object);
 		} else {
-			throw new Exception("Can't read object");
+			throw new Exception("Can't read object from stream");
 		}
 
 		return obj;
@@ -311,7 +312,7 @@ public class JsonRealization extends JsonParser {
 	}
 
 	private ArrayList<String> parseArray(Object value) {
-		ArrayList<String> found = new ArrayList<String>();
+		ArrayList<String> itmes = new ArrayList<String>();
 		char[] input = ((String) value).toCharArray();
 		StringBuilder currentObject = new StringBuilder();
 		boolean grabField = false;
@@ -324,7 +325,7 @@ public class JsonRealization extends JsonParser {
 				if (str.equals(JsonData.END.getValue())) {
 					grabField = false;
 					currentObject.append(ch);
-					found.add(currentObject.toString());
+					itmes.add(currentObject.toString());
 					currentObject = new StringBuilder();
 				}
 			}
@@ -333,9 +334,11 @@ public class JsonRealization extends JsonParser {
 			}
 		}
 
-		return found;
+		return itmes;
 	}
 
+	//TODO following 2 methods should be optimized
+	//getListOfSerializableFieldNames and getListOfSerializableFieldValues
 	private static ArrayList<String> getListOfSerializableFieldNames(String currentObject) {
 		ArrayList<String> fieldNames = new ArrayList<String>();
 		ArrayList<String> fieldValues = new ArrayList<String>();
