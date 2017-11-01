@@ -303,6 +303,7 @@ public class Group implements IMilitaryCommissariat {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
+		sb.append("Name: ").append(this.getName()).append(System.lineSeparator());
 		for (Student student : storage) {
 			if (student != null) {
 				sb.append(student + System.lineSeparator());
