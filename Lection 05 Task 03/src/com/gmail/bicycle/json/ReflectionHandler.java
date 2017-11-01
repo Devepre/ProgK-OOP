@@ -36,37 +36,9 @@ public class ReflectionHandler {
 		Class<?> objClass = obj.getClass();
 		
 		return getField(objClass, name);
-
-//		boolean fieldFound = true;
-//		try {
-//			Field currentField = objClass.getDeclaredField(name);
-//		} catch (NoSuchFieldException e) {
-//			fieldFound = false;
-//		}
-//
-//		while (!fieldFound && objClass.getSuperclass() != null) {
-//			Field[] fields = objClass.getDeclaredFields();
-//			for (Field field : fields) {
-//				if (field.isAnnotationPresent(SerializedParameter.class)) {
-//					SerializedParameter annotaion = field.getAnnotation(SerializedParameter.class);
-//					if (annotaion.value().equals(name)) {
-//						fieldFound = true;
-//						break;
-//					}
-//				}
-//			}
-//			if (!fieldFound) {
-//				objClass = objClass.getSuperclass();
-//			}
-//		}
-//		Field field = objClass.getDeclaredField(name);
-//
-//		return field;
 	}
 	
 	public static Field getField(Class<?> objClass, String name) throws NoSuchFieldException, SecurityException {
-		//Class<?> objClass = obj.getClass();
-
 		boolean fieldFound = true;
 		try {
 			Field currentField = objClass.getDeclaredField(name);
