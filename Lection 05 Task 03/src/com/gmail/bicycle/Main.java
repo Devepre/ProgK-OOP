@@ -35,38 +35,42 @@ public class Main {
 			e.printStackTrace();
 		}
 
-		System.out.println("<<<Demo using DAO>>>");
-		System.out.println("<<<File name used from PlainTextDAOFactory and JSONDAOFactory configuration>>>");
-		System.out.println();
+		//Block of code using DAO model
+		{
+			System.out.println("<<<Demo using DAO>>>");
+			System.out.println("<<<File name used from PlainTextDAOFactory and JSONDAOFactory configuration>>>");
+			System.out.println();
 
-		DAOFactory groupDAOFactory = DAOFactory.getDAOFactory(DAOFactory.PLAIN_TEXT);
-		GroupDAO groupDAO = groupDAOFactory.getGroupDAO();
-		try {
-			System.out.println("Saving group using Plain Text DAO method. Mode: adding to file if exist");
-			System.out.println("File name is: " + PlainTextDAOFactory.FILE_NAME);
-			groupDAO.saveGroup(group);
-			System.out.println("Loading group using Plain Text DAO method");
-			Group loadedGroup = groupDAO.loadGroup();
-			System.out.println(loadedGroup);
+			DAOFactory groupDAOFactory = DAOFactory.getDAOFactory(DAOFactory.PLAIN_TEXT);
+			GroupDAO groupDAO = groupDAOFactory.getGroupDAO();
+			try {
+				System.out.println("Saving group using Plain Text DAO method. Mode: adding to file if exist");
+				System.out.println("File name is: " + PlainTextDAOFactory.FILE_NAME);
+				groupDAO.saveGroup(group);
+				System.out.println("Loading group using Plain Text DAO method");
+				Group loadedGroup = groupDAO.loadGroup();
+				System.out.println(loadedGroup);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-		//it's the only code to change provider from Plain text to JSON
-		groupDAOFactory = DAOFactory.getDAOFactory(DAOFactory.JSON);
-		groupDAO = groupDAOFactory.getGroupDAO();
+			//it's the only code to change provider from Plain text to JSON
+			groupDAOFactory = DAOFactory.getDAOFactory(DAOFactory.JSON);
+			groupDAO = groupDAOFactory.getGroupDAO();
 
-		try {
-			System.out.println("Saving group using JSON method");
-			System.out.println("File name is: " + JSONDAOFactory.FILE_NAME);
-			groupDAO.saveGroup(group);
-			System.out.println("Loading group using JSON method");
-			Group loadededJsonGroup = groupDAO.loadGroup();
-			System.out.println(loadededJsonGroup);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			try {
+				System.out.println("Saving group using JSON method");
+				System.out.println("File name is: " + JSONDAOFactory.FILE_NAME);
+				groupDAO.saveGroup(group);
+				System.out.println("Loading group using JSON method");
+				Group loadededJsonGroup = groupDAO.loadGroup();
+				System.out.println(loadededJsonGroup);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("<<<End Demo using DAO>>>");			
+		}	//End block of code using DAO model
 
 		Group loadedGroup = new Group();
 		String fileName = "data.json";
