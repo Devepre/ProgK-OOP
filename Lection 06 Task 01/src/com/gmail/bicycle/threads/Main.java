@@ -1,24 +1,28 @@
 package com.gmail.bicycle.threads;
 
 public class Main {
-	private static Thread[] threads;
+	private static Thread[] threadsArray;
 	private static FactorialThread[] factorialThreadArray;
 
 	public static void main(String[] args) {
 		System.out.println("main method start");
 
 		int n = 100;
-		generateEverything(n);
-		startThreads(threads);
-		joinThreads(threads);
-		showResults();
+		start(n);
 
 		System.out.println("End of main method");
+	}
+	
+	private static void start(int n) {
+		generateEverything(n);
+		startThreads(threadsArray);
+		joinThreads(threadsArray);
+		showResults();
 	}
 
 	private static void generateEverything(int n) {
 		factorialThreadArray = new FactorialThread[n];
-		threads = generateThreads(n);
+		threadsArray = generateThreads(n);
 	}
 
 	private static Thread[] generateThreads(int n) {
