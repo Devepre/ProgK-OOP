@@ -17,6 +17,8 @@ public class FactorialThread implements Runnable {
 		Thread thread = Thread.currentThread();
 		this.name = thread.getName();
 		this.result = Factorial.calculateLinear(number);
+		System.out.printf("%s->%d! = %d", name, number, result);
+		System.out.println();
 	}
 	
 	public int getNumber() {
