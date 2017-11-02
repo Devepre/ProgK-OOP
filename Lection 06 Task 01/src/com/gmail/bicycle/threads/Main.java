@@ -6,10 +6,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.out.println("main method start");
-
 		int n = 100;
 		start(n);
-
 		System.out.println("End of main method");
 	}
 	
@@ -43,9 +41,9 @@ public class Main {
 	}
 
 	private static void joinThreads(Thread... threads) {
-		for (int i = 0; i < threads.length; i++) {
+		for (Thread thread : threads) {
 			try {
-				threads[i].join();
+				thread.join();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
