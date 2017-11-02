@@ -5,6 +5,7 @@ import java.math.BigInteger;
 public class FactorialThread implements Runnable {
 	private int number;
 	private BigInteger result;
+	private String name;
 
 	public FactorialThread(int number) {
 		super();
@@ -14,10 +15,8 @@ public class FactorialThread implements Runnable {
 	@Override
 	public void run() {
 		Thread thread = Thread.currentThread();
-		System.out.println("I am thread " + thread.getName());
-		result = Factorial.calculateLinear(number);
-		System.out.println(result);
-		System.out.println("End of thread " + thread.getName());
+		this.name = thread.getName();
+		this.result = Factorial.calculateLinear(number);
 	}
 	
 	public int getNumber() {
@@ -26,6 +25,10 @@ public class FactorialThread implements Runnable {
 
 	public BigInteger getResult() {
 		return result;
+	}
+
+	public String getName() {
+		return name;
 	}
 	
 }
