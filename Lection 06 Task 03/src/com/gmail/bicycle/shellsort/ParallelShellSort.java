@@ -62,6 +62,10 @@ public class ParallelShellSort implements Runnable {
 
 	public ArrayList<Integer> generateGapSequences() {
 		ArrayList<Integer> gapSequences = new ArrayList<Integer>();
+//		ArrayList<Integer> gapSequences = new ArrayList<Integer>();
+//		gapSequences.add(50000);
+//		gapSequences.add(6250);
+//		gapSequences.add(1);
 		
 		int length = array.length;
 		int gap;

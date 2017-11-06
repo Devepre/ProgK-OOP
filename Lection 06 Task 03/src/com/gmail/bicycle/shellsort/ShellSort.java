@@ -22,6 +22,10 @@ public class ShellSort {
 	
 	public static ArrayList<Integer> generateGapSequences(int[] array) {
 		ArrayList<Integer> gapSequences = new ArrayList<Integer>();
+//		ArrayList<Integer> gapSequences = new ArrayList<Integer>();
+//		gapSequences.add(50000);
+//		gapSequences.add(6250);
+//		gapSequences.add(1);
 		int length = array.length;
 		int gap;
 		for (int i = 1; (gap = (int)Math.round((length / Math.pow(2, i)))) > 1 ; i++) {

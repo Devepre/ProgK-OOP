@@ -6,7 +6,7 @@ import com.gmail.bicycle.threads.drivers.TimeWatcher;
 
 public class Main {
 	public static void main(String[] args) {
-		int size = 10_000_000;
+		int size = 100_000;
 		int[] array = generateArray(size);
 		int[] arrayB = Arrays.copyOf(array, array.length);
 		
