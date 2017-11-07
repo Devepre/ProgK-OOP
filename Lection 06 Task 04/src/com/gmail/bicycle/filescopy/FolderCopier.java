@@ -1,14 +1,12 @@
 package com.gmail.bicycle.filescopy;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class FolderCopier implements Runnable {
 	private File folderInput;
 	private File folderOutput;
-	private int threads;
+	private int numOfThreads;
 
 	public FolderCopier() {
 		super();
@@ -21,48 +19,64 @@ public class FolderCopier implements Runnable {
 		}
 		this.folderInput = folderInput;
 		this.folderOutput = folderOutput;
-		this.threads = threads;
+		this.numOfThreads = threads;
 	}
 
 	@Override
 	public void run() {
-		File[] listOfFiles = getListOfFilesInDiretctory(folderInput);
-		Arrays.sort(listOfFiles, (fileOne, fileTwo) -> Long.compare(fileOne.length(), fileTwo.length()));
+		ArrayList<Thread> threads = new ArrayList<Thread>();
+		ArrayList<File> listOfFiles = getListOfFilesInDiretctory(folderInput);
+		listOfFiles.sort((fileOne, fileTwo) -> Long.compare(fileOne.length(), fileTwo.length()));
 
-		for (int i = 0; i < listOfFiles.length / 2; i++) {
-			int count = (listOfFiles.length) / threads;
-			int index = i;
-			ArrayList<File> filesToCopy = new ArrayList<File>(count);
-			for (int j = 0; j < count / 2; j++) {
-				index = i + j;
-				filesToCopy.add(listOfFiles[index]);
-				index = listOfFiles.length - i - 1;
-				filesToCopy.add(listOfFiles[index]);
+		int size = listOfFiles.size();
+		for (int i = 0; i < numOfThreads; i++) {
+			ArrayList<File> filesToCopy = new ArrayList<File>();
+			for (int j = 0; j < (Math.ceil(size / numOfThreads) / 2); j++) {
+				if (listOfFiles.isEmpty()) {
+					break;
+				}
+				filesToCopy.add(listOfFiles.get(0));
+				listOfFiles.remove(0);
+				if (listOfFiles.isEmpty()) {
+					break;
+				}
+				filesToCopy.add(listOfFiles.get(listOfFiles.size() - 1));
+				listOfFiles.remove(listOfFiles.size() - 1);
 			}
-			System.out.println(filesToCopy.toString());
+			if (i == numOfThreads - 1) {
+				for (; !listOfFiles.isEmpty();) {
+					filesToCopy.add(listOfFiles.get(0));
+					listOfFiles.remove(0);
+				}
+			}
+			Thread thread = new Thread(new FileCopier(filesToCopy, folderOutput));
+			threads.add(thread);
+			System.out.println(filesToCopy.toString() + " -> " + folderOutput.getAbsolutePath());
+		}
+		startAndJoinThreads(threads);
 
-			FileCopier fileCopier = new FileCopier(filesToCopy, folderOutput);
-			Thread thread = new Thread(fileCopier);
-			//thread.start();
+	}
 
+	private void startAndJoinThreads(ArrayList<Thread> threads) {
+		for (Thread thread : threads) {
+			thread.start();
+		}
+		for (Thread thread : threads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
-	private void folderCopy() throws IllegalArgumentException, IOException {
-
-	}
-
-	private File[] getListOfFilesInDiretctory(File original) {
-		File[] tempList = new File[original.listFiles().length];
-		int i = 0;
+	private ArrayList<File> getListOfFilesInDiretctory(File original) {
+		ArrayList<File> resultList = new ArrayList<File>(original.listFiles().length);
 		for (File file : original.listFiles()) {
 			if (file.isFile()) {
-				tempList[i++] = file;
+				resultList.add(file);
 			}
 		}
-		File[] resultList = Arrays.copyOf(tempList, i);
-		tempList = null;
-
 		return resultList;
 	}
 
