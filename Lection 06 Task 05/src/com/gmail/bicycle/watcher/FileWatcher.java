@@ -7,7 +7,12 @@ import java.util.Arrays;
 
 public class FileWatcher implements Runnable {
 	private static final int TIME = 1000;
+
 	private File mainFolder;
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy  hh:mm:ss");
+	private String[] listOfPreviousFiles;
+	private String[] listOfCurrentFiles;
+	private int renamedFlag;
 
 	public FileWatcher() {
 		super();
@@ -24,49 +29,50 @@ public class FileWatcher implements Runnable {
 	@Override
 	public void run() {
 		Thread thread = Thread.currentThread();
-		SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy  hh:mm:ss");
+		this.listOfPreviousFiles = this.mainFolder.list();
+		System.out.println("Folder watcher started for " + this.mainFolder.getAbsolutePath() + " folder");
 
-		String[] listOfPreviousFiles = this.mainFolder.list();
-		String[] listOfCurrentFiles;		
+		ArrayList<String> difference;
 		for (; !thread.isInterrupted();) {
-			int renamedFlag = 0;
+			renamedFlag = 0;
 			listOfCurrentFiles = mainFolder.list();
-			ArrayList<String> difference = compareRemovedLists(listOfPreviousFiles, listOfCurrentFiles);
-			if (!difference.isEmpty()) {
-				renamedFlag++;
-				for (String string : difference) {
-					System.out.print(sdf.format(System.currentTimeMillis()));
-					System.out.println(" removed:\t" + string);
-				}
+
+			difference = compareRemovedLists();
+			checkDifference(difference, false);
+
+			difference = compareAddedLists();
+			checkDifference(difference, true);
+
+			switch (this.renamedFlag) {
+			case 2:
+				System.out.print(" [actually it was renamed]");
+			case 1:
+				System.out.println();
 			}
 
-			difference = compareAddedLists(listOfPreviousFiles, listOfCurrentFiles);
-			if (!difference.isEmpty()) {
-				renamedFlag++;
-				for (String string : difference) {
-					System.out.print(sdf.format(System.currentTimeMillis()));
-					System.out.print(" added:\t" + string);
-				}
-			}
+			this.listOfPreviousFiles = this.listOfCurrentFiles;
 
-			if (renamedFlag == 2) {
-				System.out.println(" [actually it was renamed]");
-			} else {
-				if (renamedFlag == 1) {
-					System.out.println();
-				}
-			}
-			listOfPreviousFiles = listOfCurrentFiles;
 			try {
 				Thread.sleep(TIME);
 			} catch (InterruptedException e) {
 				break;
 			}
 		}
-		System.out.println("Folder wacher stopped.");
+		System.out.println("Folder watcher stopped.");
 	}
 
-	private ArrayList<String> compareAddedLists(String[] listOfPreviousFiles, String[] listOfCurrentFiles) {
+	private void checkDifference(ArrayList<String> difference, boolean added) {
+		if (!difference.isEmpty()) {
+			this.renamedFlag++;
+
+			for (String string : difference) {
+				System.out.print(this.sdf.format(System.currentTimeMillis()));
+				System.out.print(added ? " added\t" + string : " removed:\t" + string + System.lineSeparator());
+			}
+		}
+	}
+
+	private ArrayList<String> compareAddedLists() {
 		ArrayList<String> result = new ArrayList<String>();
 		String listPrev = Arrays.toString(listOfPreviousFiles);
 		for (String string : listOfCurrentFiles) {
@@ -79,7 +85,7 @@ public class FileWatcher implements Runnable {
 		return result;
 	}
 
-	private ArrayList<String> compareRemovedLists(String[] listOfPreviousFiles, String[] listOfCurrentFiles) {
+	private ArrayList<String> compareRemovedLists() {
 		ArrayList<String> result = new ArrayList<String>();
 		String listCurrent = Arrays.toString(listOfCurrentFiles);
 		for (String string : listOfPreviousFiles) {
