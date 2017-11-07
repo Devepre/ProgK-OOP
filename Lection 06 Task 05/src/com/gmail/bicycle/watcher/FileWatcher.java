@@ -20,14 +20,14 @@ public class FileWatcher implements Runnable {
 
 	public FileWatcher(File mainFolder) {
 		super();
-		if (mainFolder == null || !mainFolder.exists()) {
-			throw new IllegalArgumentException("Wrong folder");
-		}
 		this.mainFolder = mainFolder;
 	}
 
 	@Override
 	public void run() {
+		if (mainFolder == null || !mainFolder.exists()) {
+			throw new IllegalArgumentException("Wrong folder");
+		}
 		Thread thread = Thread.currentThread();
 		this.listOfPreviousFiles = this.mainFolder.list();
 		System.out.println("Folder watcher started for " + this.mainFolder.getAbsolutePath() + " folder");
