@@ -11,15 +11,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class Main {
+	private static File fileToSearch;
+	private static File folder;
+	private static int nThreads = 3;
 
-	public static void main(String[] args) {
-		int nThreads = 3;
-		String folderName = "E:\\temp\\";
-		File folder = new File(folderName);
-		String fileName = "01.txt";
-		File fileToSearch = new File(fileName);
-		List<String> found = new ArrayList<>();
-
+	public static void main(String[] args) {		
+		initializeData("E:\\temp\\", "01.txt");
+						
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		CompletionService<List<String>> completionService = new ExecutorCompletionService<>(executorService);
 		SearchFile thSearch = new SearchFile(fileToSearch, folder, nThreads);
@@ -27,14 +25,29 @@ public class Main {
 
 		try {
 			Future<List<String>> future = completionService.take();
-			found = future.get();
-			System.out.println(found);
+			List<String> found = future.get();
+			printResults(found);
 		} catch (InterruptedException | ExecutionException e) {
 			e.printStackTrace();
 		} finally {
 			executorService.shutdown();
 		}
 
+	}
+	
+	private static void initializeData(String folderName, String fileName) {		
+		folder = new File(folderName);
+		fileToSearch = new File(fileName);		
+	}
+	
+	private static void printResults(List<String> found) {
+		System.out.println("Searching results:");
+		if (found.isEmpty()) {
+			System.out.println("Nothing to show");
+		}
+		for (String string : found) {
+			System.out.println(string);
+		}
 	}
 
 }
