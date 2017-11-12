@@ -77,7 +77,7 @@ public class SearchFile implements Callable<List<String>> {
 		}
 
 		private void printFileInfo(File file) {
-			// System.out.println(file.getAbsolutePath());
+			// System.out.println(file.getAbsolutePath());	//can be used with Runnable implementation
 			SearchFile.this.result.add(file.getAbsolutePath());
 		}
 
