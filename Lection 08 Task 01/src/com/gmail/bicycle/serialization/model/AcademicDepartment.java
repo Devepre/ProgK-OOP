@@ -1,10 +1,8 @@
-package com.gmail.bicycle.serialization;
+package com.gmail.bicycle.serialization.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.gmail.bicycle.Group;
 
 public class AcademicDepartment implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +36,7 @@ public class AcademicDepartment implements Serializable {
 
 	@Override
 	public String toString() {
-		return "AcademicDepartment [name=" + name + ", groups=" + groups + "]";
+		return "AcademicDepartment [name=" + name + ", groups=" + System.lineSeparator() + groups + "]";
 	}
 		
 }

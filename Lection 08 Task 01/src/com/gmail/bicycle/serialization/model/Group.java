@@ -1,4 +1,4 @@
-package com.gmail.bicycle.serialization;
+package com.gmail.bicycle.serialization.model;
 
 import java.io.Serializable;
 import java.text.ParseException;
