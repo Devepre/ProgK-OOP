@@ -8,6 +8,8 @@ public class Stack {
 	private int length;
 	private Object[] storage;
 	private boolean selfPrinted;
+	private boolean blackListEnabled;
+	private BlackList blackList;
 
 	public Stack() {
 		super();
@@ -23,35 +25,40 @@ public class Stack {
 		this.capacity = capacity;
 		this.storage = new Object[capacity];
 	}
-		
+
 	public void push(Object obj) throws StackCapaictyException {
-		checkStorage();
-		this.storage[this.length++] = obj;
-		
+		boolean allowedTransaction = blackListEnabled ? !blackList.checkClass(obj.getClass()) : true;
+		if (allowedTransaction) {
+			checkStorage();
+			this.storage[this.length++] = obj;
+		} else {
+			throw new IllegalArgumentException("Object class \"" + obj.getClass() + "\" is in " + this.blackList);
+		}
+
 		if (selfPrinted) {
 			System.out.printf("Push operation for \"%s\" -> ", obj);
 			System.out.println(this);
 		}
 	}
-	
-	public Object pop() throws StackCapaictyException {		
+
+	public Object pop() throws StackCapaictyException {
 		Object obj = get();
 		this.storage[--length] = null;
-		
+
 		if (selfPrinted) {
 			System.out.printf("Pop operation result is \"%s\" -> ", obj);
 			System.out.println(this);
 		}
 		return obj;
 	}
-	
+
 	public Object get() throws StackCapaictyException {
 		if (this.length < 1) {
 			throw new StackCapaictyException("End of Stack is reached");
 		}
 		Object obj = null;
 		obj = this.storage[this.length - 1];
-		
+
 		return obj;
 	}
 
@@ -70,7 +77,7 @@ public class Stack {
 	 */
 	private void expandCapacity() throws StackCapaictyException {
 		int newSize = getCapacity() * RESIZE_COEF;
-		newSize = getCapacity() > newSize ? Integer.MAX_VALUE - 8 : newSize;		
+		newSize = getCapacity() > newSize ? Integer.MAX_VALUE - 8 : newSize;
 		Object[] newStorage = null;
 		try {
 			newStorage = new Object[newSize];
@@ -100,7 +107,15 @@ public class Stack {
 	public int getLength() {
 		return length;
 	}
-	
+
+	public BlackList getBlackList() {
+		return blackList;
+	}
+
+	public void setBlackList(BlackList blackList) {
+		this.blackList = blackList;
+		this.blackListEnabled = !(blackList == null);
+	}
 
 	public boolean isSelfPrinted() {
 		return selfPrinted;
@@ -110,11 +125,20 @@ public class Stack {
 		this.selfPrinted = selfPrinted;
 	}
 
+	public boolean isBlackListEnabled() {
+		return blackListEnabled;
+	}
+
+	public void setBlackListEnabled(boolean blackListed) {
+		this.blackListEnabled = blackListed;
+	}
+
 	@Override
 	public String toString() {
-		return "Stack capacity = " + capacity + ", length = " + length + ", storage:" + System.lineSeparator() + Arrays.toString(storage)
-		// + ", pointer=" + pointer + "]";
-				 + System.lineSeparator();
+		return "Stack capacity = " + capacity + ", length = " + length + ", storage:" + System.lineSeparator()
+				+ Arrays.toString(storage)
+				// + ", pointer=" + pointer + "]";
+				+ System.lineSeparator();
 	}
 
 }
