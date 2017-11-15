@@ -27,6 +27,10 @@ public class Stack {
 	}
 
 	public void push(Object obj) throws StackCapaictyException {
+		if (obj == null) {
+			throw new IllegalArgumentException("Can't push Null");
+		}
+		
 		boolean allowedTransaction = blackListEnabled ? !blackList.checkClass(obj.getClass()) : true;
 		if (allowedTransaction) {
 			checkStorage();
