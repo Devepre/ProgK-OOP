@@ -23,7 +23,7 @@ public class DataWorker {
 		String fileName = "dep.dat";
 		switch (choice) {
 		case 1:
-			saveAndPrintInfo(fileName);
+			saveAndPrintInfo(fileName, null);
 			break;
 		case 2:
 			loadAndPrintInfo(fileName);
@@ -35,14 +35,17 @@ public class DataWorker {
 		}
 	}
 
-	private void loadAndPrintInfo(String fileName) {
+	private AcademicDepartment loadAndPrintInfo(String fileName) {
 		AcademicDepartment restoredDepartment = loadDepartment(fileName);
 		System.out.println("Loaded info is:");
 		System.out.println(restoredDepartment);
+		return restoredDepartment;
 	}
 
-	private void saveAndPrintInfo(String fileName) {
-		AcademicDepartment academicDepartment = createDefaultDepartment();
+	private void saveAndPrintInfo(String fileName, AcademicDepartment academicDepartment) {
+		if (academicDepartment == null) {
+			academicDepartment = createDefaultDepartment();			
+		}		
 		saveDepartment(academicDepartment, fileName);
 		System.out.println("Done");
 		System.out.println("Saved info is:");
