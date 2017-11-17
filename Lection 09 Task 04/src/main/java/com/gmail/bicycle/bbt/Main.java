@@ -8,13 +8,11 @@ public class Main {
 	public static void main(String[] args) {
 		Deque<Actor> actors = Actor.initActors();
 		ColaMut<Actor> colaMut = new ColaMut<>(actors);
-		
-		int count = (int) (Math.random() * MAX_COUNT);
-		System.out.println(count + " drinks utilized");
-		for (int i = 0; i < count; i++) {
-			colaMut.giveCola();
-		}
-		
+
+		int number = (int) (Math.random() * MAX_COUNT);
+		System.out.println(number + " drinks utilized");
+		colaMut.giveCola(number);
+
 		System.out.println(colaMut.getQue());
 	}
 

@@ -15,6 +15,12 @@ public class ColaMut<T extends Human> {
 		this.que = que;
 	}
 
+	public void giveCola(int number) {
+		for (int i = 0; i < number; i++) {
+			this.giveCola();
+		}
+	}
+
 	public void giveCola() {
 		T drinked = que.pop();
 		que.add(drinked);
@@ -28,7 +34,7 @@ public class ColaMut<T extends Human> {
 	public void setQue(Deque<T> que) {
 		this.que = que;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Another one usual ColaMut";
