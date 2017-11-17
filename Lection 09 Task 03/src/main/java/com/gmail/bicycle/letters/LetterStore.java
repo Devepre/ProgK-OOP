@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LetterStore {
 	private static final int SIZE = 26;
@@ -50,13 +51,23 @@ public class LetterStore {
 	}
 
 	public void printReversed() {
-		Collections.reverse(storage);
-		for (Letter letter : storage) {
-			if (letter.getCount() > 0) {
-				System.out.println(letter);
-			}
-		}
-		Collections.reverse(storage);
+//		regular method
+//		Collections.reverse(storage);
+//		for (Letter letter : storage) {
+//			if (letter.getCount() > 0) {
+//				System.out.println(letter);
+//			}
+//		}
+//		Collections.reverse(storage);
+		
+//		Stream API method
+		List<Letter> result = storage.stream()
+				.filter(n -> n.getCount() > 0)
+				.sorted(Collections.reverseOrder())
+				.collect(Collectors.toCollection(ArrayList::new));
+				
+		System.out.println(result);
+				
 	}
 
 	@Override
