@@ -3,10 +3,12 @@ package com.gmail.bicycle.serialization.model;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -18,7 +20,7 @@ public class Group implements IMilitaryCommissariat, Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int CAPACITY = 10;
 	private String name;
-	private Student[] storage = new Student[CAPACITY];
+	private List<Student> storage = new ArrayList<Student>(CAPACITY);
 
 	private enum BooleanAnswer {
 		YES, NO
@@ -142,40 +144,36 @@ public class Group implements IMilitaryCommissariat, Serializable {
 		if (student == null) {
 			throw new IllegalArgumentException("Student can't be null");
 		}
-		for (int i = 0; i < storage.length; i++) {
-			Student tempStudent = storage[i];
-			if (tempStudent == null) {
-				storage[i] = student;
-				return true;
-			} else {
-				if (tempStudent.equals(student)) {
-					System.err.print(tempStudent.getId() + " ID is already registered" + System.lineSeparator());
-					return false;
-				}
-			}
+		if (storage.size() == CAPACITY) {
+			throw new GroupOutOfBoundsException();
 		}
-		throw new GroupOutOfBoundsException();
+		if (storage.contains(student)) {
+			System.err.print(student.getId() + " ID is already registered" + System.lineSeparator());
+			return false;
+		} else {
+			storage.add(student);
+			return true;
+		}				
 	}
 
 	public Student remove(Student student) {
-		for (int i = 0; i < storage.length; i++) {
-			if (storage[i].equals(student)) {
-				storage[i] = null;
-				return student;
-			}
+		if (storage.remove(student)) {
+			return student;
+		} else {
+			return null;
 		}
-		return null;
+		
 	}
 
 	public Student remove(int index) throws GroupOutOfBoundsException {
 		checkIndex(index);
-		Student student = storage[index];
-		storage[index] = null;
+		Student student = storage.get(index);
+		storage.remove(index);
 		return student;
 	}
 
 	private void checkIndex(int index) throws GroupOutOfBoundsException {
-		if (index >= storage.length || index < 0) {
+		if (index >= storage.size() || index < 0) {
 			throw new GroupOutOfBoundsException();
 		}
 	}
@@ -205,23 +203,23 @@ public class Group implements IMilitaryCommissariat, Serializable {
 	public void sort(SortCriterion criterion, boolean ascending) {
 		switch (criterion) {
 		case SURNAME:
-			Arrays.sort(storage, (a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
+			storage.sort((a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
 					: a.getSurname().compareToIgnoreCase(b.getSurname()));
 			break;
 		case NAME:
-			Arrays.sort(storage, (a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
+			storage.sort((a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
 					: a.getName().compareToIgnoreCase(b.getName()));
 			break;
 		case DATE_OF_BIRTH:
-			Arrays.sort(storage, (a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
+			storage.sort((a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
 					: a.getDateOfBirth().compareTo(b.getDateOfBirth()));
 			break;
 		case SEX:
-			Arrays.sort(storage, (a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
+			storage.sort((a, b) -> CheckNull.checkNull(a, b) != CheckNull.NOT_NULL ? CheckNull.checkNull(a, b)
 					: ((Boolean) a.isMale()).compareTo((Boolean) b.isMale()));
 			break;
 		case STIPEND:
-			Arrays.sort(storage, (a, b) -> {
+			storage.sort((a, b) -> {
 				if (CheckNull.checkNull(a, b) != CheckNull.NOT_NULL) {
 					return CheckNull.checkNull(a, b);
 				}
@@ -261,16 +259,11 @@ public class Group implements IMilitaryCommissariat, Serializable {
 	}
 
 	public void clear() {
-		storage = new Student[CAPACITY];
+		storage.clear();
 	}
 
 	public int size() {
-		int size = 0;
-		for (int i = 0; i < storage.length; i++) {
-			if (storage[i] != null) {
-				size++;
-			}
-		}
+		int size = storage.size();;
 		return size;
 	}
 
@@ -278,7 +271,7 @@ public class Group implements IMilitaryCommissariat, Serializable {
 		return CAPACITY;
 	}
 
-	public Student[] getStorage() {
+	public List<Student> getStorage() {
 		return storage;
 	}
 
@@ -290,11 +283,11 @@ public class Group implements IMilitaryCommissariat, Serializable {
 		this.name = name;
 	}
 
-	public Student[] getStudents() {
+	public List<Student> getStudents() {
 		return storage;
 	}
 
-	public void setStudents(Student[] students) {
+	public void setStudents(List<Student> students) {
 		this.storage = students;
 	}
 
