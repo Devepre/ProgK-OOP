@@ -2,10 +2,12 @@ package com.gmail.bicycle.letters;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LetterStore {
 	private static final int SIZE = 26;
@@ -51,7 +53,7 @@ public class LetterStore {
 	}
 
 	public void printReversed() {
-//		regular method
+//		usual method
 //		Collections.reverse(storage);
 //		for (Letter letter : storage) {
 //			if (letter.getCount() > 0) {
@@ -60,13 +62,18 @@ public class LetterStore {
 //		}
 //		Collections.reverse(storage);
 		
-//		Stream API method
-		List<Letter> result = storage.stream()
-				.filter(n -> n.getCount() > 0)
-				.sorted(Collections.reverseOrder())
-				.collect(Collectors.toCollection(ArrayList::new));
+//		Stream API v1
+//		List<Letter> result = storage.stream()
+//				.filter(n -> n.getCount() > 0)
+//				.sorted(Collections.reverseOrder())
+//				.collect(Collectors.toCollection(ArrayList::new));
+//		System.out.println(result);
 				
-		System.out.println(result);
+//		Stream API v2		
+		storage.stream()		
+		    .sorted(Collections.reverseOrder())
+		    .filter(n -> n.getCount() > 0)
+		    .forEach(System.out::println);
 				
 	}
 
