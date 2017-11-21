@@ -19,14 +19,19 @@ public class Main {
 		}
 
 		System.out.println("Max is:");
-		int max = findMix("in.txt");
-		System.out.println(max);
+		int max;
+		try {
+			max = findMix("in.txt");
+			System.out.println(max);
+		} catch (NoSuchElementException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static int findDigit(int[] array) {
-		int result = Arrays.stream(array)
-				.map(n -> Math.abs(n))
-				.min().orElseThrow(NoSuchElementException::new);
+		int result = Arrays.stream(array).
+				map(n -> Math.abs(n)).
+				min().orElseThrow(NoSuchElementException::new);
 
 		return result;
 	}
@@ -38,42 +43,16 @@ public class Main {
 
 		return result;
 	}
-	
-	public static int findMix(String fileName) {
+
+	public static int findMix(String fileName) throws NoSuchElementException, IOException {
 		int result = -0;
-		try {
-			result = Files.lines(Paths.get(fileName))
-					.map(n -> Integer.parseInt(n))
-					.max(Integer::compare).orElseThrow(NoSuchElementException::new);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+
+		result = Files.lines(Paths.get(fileName))
+				.map(n -> Integer.parseInt(n))
+				.max(Integer::compare)
+				.orElseThrow(NoSuchElementException::new);
+
 		return result;
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
