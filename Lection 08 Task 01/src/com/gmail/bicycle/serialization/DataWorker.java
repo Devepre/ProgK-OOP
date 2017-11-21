@@ -87,7 +87,7 @@ public class DataWorker {
 		return group;
 	}
 
-	private AcademicDepartment loadDepartment(String fileName) {
+	public AcademicDepartment loadDepartment(String fileName) {
 		if (fileName.isEmpty()) {
 			throw new IllegalArgumentException("wrong parameter");
 		}
