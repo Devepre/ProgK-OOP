@@ -9,8 +9,8 @@ import java.util.NoSuchElementException;
 public class Main {
 
 	public static void main(String[] args) {
-		int[] array = new int[] { 2, -2, 4, 435, -12 };
-		System.out.println(findDigit(array));
+		int[] array = new int[] { -1, 2, -2, 4, 435, -12 };
+		System.out.println("Min is: " + findDigit(array));
 		String data = "AB ab";
 
 		int[] arr = generateArray(data);
@@ -29,9 +29,10 @@ public class Main {
 	}
 
 	public static int findDigit(int[] array) {
-		int result = Arrays.stream(array).
-				map(n -> Math.abs(n)).
-				min().orElseThrow(NoSuchElementException::new);
+		int result = Arrays.stream(array)
+				.mapToObj(Integer::valueOf)
+				.sorted((x, y) -> Integer.compare(Math.abs(x), Math.abs(y)))
+				.findFirst().orElseThrow(NoSuchElementException::new);
 
 		return result;
 	}
