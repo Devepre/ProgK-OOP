@@ -10,6 +10,10 @@ import java.util.List;
 
 public class DictionaryCreator {
 	public static final String SEPARATOR = ",";
+
+	public static void addToDictionary(TranslationDictionary dictionary, String input, String translation) {
+		dictionary.addTranslation(input, translation);
+	}
 	
 	public static TranslationDictionary loadFromTXTFile(String fileName) {
 		TranslationDictionary dictionaryMap = new DictionaryMap();
