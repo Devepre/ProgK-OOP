@@ -1,4 +1,8 @@
-package com.gmail.bicycle.translation;
+package com.gmail.bicycle;
+
+import com.gmail.bicycle.translation.DictionaryCreator;
+import com.gmail.bicycle.translation.TranslationDictionary;
+import com.gmail.bicycle.translation.Translator;
 
 public class Main {
 	public static final String FILE_INPUT = "English.in";

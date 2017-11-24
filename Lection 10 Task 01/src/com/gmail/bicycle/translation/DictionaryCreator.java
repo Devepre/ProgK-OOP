@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
+import com.gmail.bicycle.util.FileHandler;
+
 public class DictionaryCreator {
 	public static final String SEPARATOR = ",";
 
