@@ -19,7 +19,8 @@ public class Translator {
 		try (PrintWriter printWriter = new PrintWriter(new FileWriter(outputFileName))) {
 			Path path = Paths.get(inputFileName);
 			Files.lines(path)
-					.flatMap(line -> Arrays.stream(line.split(REG_EXP_WORDS)))
+					.map(line -> line.split(REG_EXP_WORDS))
+					.flatMap(Arrays::stream)
 					.map(word -> word.toLowerCase())
 					.map(word -> dictionary.get(word))
 					.map(word -> Optional.ofNullable(word))
