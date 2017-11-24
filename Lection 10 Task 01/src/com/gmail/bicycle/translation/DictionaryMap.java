@@ -1,10 +1,12 @@
 package com.gmail.bicycle.translation;
 
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DictionaryMap implements TranslationDictionary {
+public class DictionaryMap implements TranslationDictionary, Serializable {
+	private static final long serialVersionUID = 1L;
 	private Map<String, String> dictionary = new HashMap<>();
 
 	public DictionaryMap() {
@@ -16,6 +18,7 @@ public class DictionaryMap implements TranslationDictionary {
 		dictionary.put(input, output);
 	}
 
+	@Override
 	public AbstractMap<String, String> getDictionary() {
 		return (AbstractMap<String, String>) dictionary;
 	}
