@@ -13,7 +13,7 @@ import java.util.Optional;
 public class Translator {
 	private static final String REG_EXP_WORDS = "[\\p{Punct}\\s]+";
 
-	public static void translate(String inputFileName, String outputFileName, DictionaryMap dictionaryMap) {
+	public static void translate(String inputFileName, String outputFileName, TranslationDictionary dictionaryMap) {
 		AbstractMap<String, String> dictionary = dictionaryMap.getDictionary();
 
 		try (PrintWriter printWriter = new PrintWriter(new FileWriter(outputFileName))) {

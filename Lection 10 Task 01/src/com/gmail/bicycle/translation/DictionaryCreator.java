@@ -7,8 +7,8 @@ import java.util.List;
 public class DictionaryCreator {
 	public static final String SEPARATOR = ",";
 	
-	public static DictionaryMap loadFromFile(String fileName) {
-		DictionaryMap dictionaryMap = new DictionaryMap();
+	public static TranslationDictionary loadFromFile(String fileName) {
+		TranslationDictionary dictionaryMap = new DictionaryMap();
 		try {
 			List<String> lines = FileHandler.readTextFromFile(new File(fileName), SEPARATOR);
 			
@@ -23,5 +23,6 @@ public class DictionaryCreator {
 		
 		return dictionaryMap;
 	}
+	
 
 }
