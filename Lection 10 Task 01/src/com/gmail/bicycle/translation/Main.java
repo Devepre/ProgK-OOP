@@ -7,9 +7,10 @@ public class Main {
 	public static final String FILE_DICTIONARY_BIN = "dictionary.dat";
 
 	public static void main(String[] args) {
-		TranslationDictionary dictionaryMap = DictionaryCreator.loadFromTXTFile(FILE_DICTIONARY);
-		DictionaryCreator.saveToFile(dictionaryMap, FILE_DICTIONARY_BIN");
+//		TranslationDictionary dictionaryMap = DictionaryCreator.loadFromTXTFile(FILE_DICTIONARY_TXT);
 		TranslationDictionary dictionaryMap = DictionaryCreator.loadFromFile(FILE_DICTIONARY_BIN);
+		DictionaryCreator.addToDictionary(dictionaryMap, "end", "κ³νεφό");
+		DictionaryCreator.saveToFile(dictionaryMap, FILE_DICTIONARY_BIN);		
 		Translator.translate(FILE_INPUT, FILE_OUTPUT, dictionaryMap);
 
 	}
