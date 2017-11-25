@@ -1,4 +1,4 @@
-package com.gmail.bicycle;
+package com.gmail.bicycle.ascii;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -3,6 +3,10 @@ package com.gmail.bicycle;
 import java.io.IOException;
 import java.util.Scanner;
 
+import com.gmail.bicycle.ascii.Alphabet;
+import com.gmail.bicycle.ascii.AlphabetGenerator;
+import com.gmail.bicycle.ascii.TextProcessor;
+
 public class Main {
 	public static final String DEF_MESSAGE = "HELLO WORLD FROM JAVA!";
 

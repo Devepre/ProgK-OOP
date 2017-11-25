@@ -1,4 +1,4 @@
-package com.gmail.bicycle;
+package com.gmail.bicycle.ascii;
 
 public class AlphabetGenerator {
 	public static Alphabet generateDefault() {
