@@ -84,7 +84,7 @@ public class RequestHandler implements Runnable {
 			Object group = clazz.newInstance();
 			methodName = this.methods.get(Integer.parseInt(arg));
 
-			Method method = clazz.getDeclaredMethod(methodName);
+			Method method = clazz.getMethod(methodName);
 			System.out.println("Invoking method " + method.getName());
 			Object obj = method.invoke(group, null);
 			methodResult = obj.toString();
