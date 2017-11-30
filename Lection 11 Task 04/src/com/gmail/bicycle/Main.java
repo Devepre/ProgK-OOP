@@ -9,17 +9,17 @@ public class Main {
 			System.out.println("Usage: <port> <minutes>");
 			System.exit(0);
 		}
-		
-		GroupSocketServer server = new GroupSocketServer(Integer.parseInt(args[0]));
-		server.startServer();
 
+		GroupSocketServer server = null;
 		try {
+			server = new GroupSocketServer(Integer.parseInt(args[0]));
+			server.startServer();
 			TimeUnit.MINUTES.sleep(Integer.parseInt(args[1]));
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			server.stopServer();
 		}
-
-		server.stopServer();
 	}
 
 }
