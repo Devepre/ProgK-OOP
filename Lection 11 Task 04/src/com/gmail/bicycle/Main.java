@@ -3,15 +3,17 @@ package com.gmail.bicycle;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
-	private static final int PORT = 8080;
-	private static final int MINUTES = 10;
-
 	public static void main(String[] args) {
-		GroupSocketServer server = new GroupSocketServer(PORT);
+		if (args.length != 2) {
+			System.out.println("Usage: <port> <minutes>");
+			System.exit(0);
+		}
+		
+		GroupSocketServer server = new GroupSocketServer(Integer.parseInt(args[0]));
 		server.startServer();
 
 		try {
-			TimeUnit.MINUTES.sleep(MINUTES);
+			TimeUnit.MINUTES.sleep(Integer.parseInt(args[1]));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -44,7 +44,7 @@ public class GroupSocketServer extends Thread {
 				String answer = generateHTML();
 
 				Socket socket = serverSocket.accept();
-				RequestHandler requestHandler = new RequestHandler(socket, answer, connections, this.methods);
+				RequestHandler requestHandler = new RequestHandler(socket, answer, this.connections, this.methods);
 				requestHandler.start();
 
 			} catch (IOException e) {
@@ -55,7 +55,7 @@ public class GroupSocketServer extends Thread {
 
 	private String generateHTML() {
 		 String result = "<!DOCTYPE html>"
-					+ System.lineSeparator()
+				 + System.lineSeparator()
 					+ "<html class=\"no-js\" lang=\"en\">"
 					+ System.lineSeparator()
 					+ "<head>"
@@ -70,7 +70,7 @@ public class GroupSocketServer extends Thread {
 					+ System.lineSeparator()
 					+ "table, th, td {"
 					+ System.lineSeparator() 
-					+ "    border: 1px solid black;"
+					+ "border: 1px solid black;"
 					+ System.lineSeparator()
 					+ "}"
 					+ System.lineSeparator()
@@ -91,9 +91,8 @@ public class GroupSocketServer extends Thread {
 			
 			return result;
 	}
-	
-	private String generateTable(Class<Group> clazz) {
 
+	private String generateTable(Class<Group> clazz) {
 		this.methods = ReflectionHandler.processFields(clazz);
 		StringBuilder sb = new StringBuilder("<table>");
 		sb.append(System.lineSeparator());
@@ -101,65 +100,23 @@ public class GroupSocketServer extends Thread {
 		for (Entry<Integer, String> row : rows) {
 			sb.append(generateRow(row));
 		}
-
-//		for (String row : methods) {
-//			sb.append(generateRow(row));
-//			sb.append(System.lineSeparator());
-//		}
 		sb.append("</table>");
-		
+
 		return sb.toString().trim();
 	}
-	
+
 	private String generateRow(Entry<Integer, String> row) {
 		StringBuilder sb = new StringBuilder("<tr>");
 		{
 			sb.append("<td>");
 			String url = "<a href=\"" + row.getKey() + "\"" + ">" + row.getValue() + "</a>";
 			sb.append(url);
-//			sb.append(value);
 			sb.append("</td>");
 		}
-	sb.append("</tr>");
-	sb.append(System.lineSeparator());
-			
-	return sb.toString().trim();
-	}
-
-	private String generateRow(String value) {
-		StringBuilder sb = new StringBuilder("<tr>");
-			{
-				sb.append("<td>");
-				String url = "<a href=\"" + value + "\"" + ">" + value + "</a>";
-				sb.append(url);
-//				sb.append(value);
-				sb.append("</td>");
-			}
 		sb.append("</tr>");
 		sb.append(System.lineSeparator());
-				
+
 		return sb.toString().trim();
 	}
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

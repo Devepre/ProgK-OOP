@@ -31,41 +31,37 @@ public class RequestHandler implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			System.out.println("Received a connection #" + this.connectionNumber);
+		System.out.println("Received a connection #" + this.connectionNumber);
 
-			try (InputStream inputStream = this.socket.getInputStream();
-					OutputStream outputStream = this.socket.getOutputStream();
-					PrintWriter printWriter = new PrintWriter(outputStream)) {
-				byte[] data = new byte[inputStream.available()];
-				inputStream.read(data);
-				
-				this.answer = extractParameter(data);
+		try (InputStream inputStream = this.socket.getInputStream();
+				OutputStream outputStream = this.socket.getOutputStream();
+				PrintWriter printWriter = new PrintWriter(outputStream)) {
+			byte[] data = new byte[inputStream.available()];
+			inputStream.read(data);
 
-				printWriter.println("HTTP/1.1 200 OK");
-				printWriter.println("Content-Type: text/html");
-				printWriter.println("Content-Length: " + this.answer.length());
-				printWriter.println();
-				printWriter.print(this.answer);
-				printWriter.flush();
+			this.answer = extractParameter(data);
+
+			printWriter.println("HTTP/1.1 200 OK");
+			printWriter.println("Content-Type: text/html");
+			printWriter.println("Content-Length: " + this.answer.length());
+			printWriter.println();
+			printWriter.print(this.answer);
+			printWriter.flush();
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		} finally {
+			try {
+				socket.close();
+				System.out.println("Connection #" + this.connectionNumber + " is closed");
 			} catch (IOException e) {
-				System.out.println(e.toString());
-			} finally {
-				try {
-					socket.close();
-					System.out.println("Connection #" + this.connectionNumber + " is closed");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
-	
+
 	private String extractParameter(byte[] data) {
 		String result = this.answer;
-		String response = convertResponse(data);
+		String response = convertResponseToString(data);
 		if (response.length() > 1) {
 			String arg = response.substring(response.indexOf("/") + 1, response.indexOf(" HTTP"));
 			if (!arg.equals("")) {
@@ -74,8 +70,8 @@ public class RequestHandler implements Runnable {
 		}
 		return result;
 	}
-	
-	private String convertResponse(byte[] data) {
+
+	private String convertResponseToString(byte[] data) {
 		StringBuilder sbResponse = new StringBuilder();
 		for (int i : data) {
 			sbResponse.append((char) i);
