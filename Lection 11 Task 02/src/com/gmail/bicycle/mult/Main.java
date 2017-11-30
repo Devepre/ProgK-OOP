@@ -6,7 +6,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		if (args.length != 2) {
-			System.out.println("Usage: SimpleSocketServer <port> <minutes>");
+			System.out.println("Usage: <port> <minutes>");
 			System.exit(0);
 		}
 		int port = Integer.parseInt(args[0]);
