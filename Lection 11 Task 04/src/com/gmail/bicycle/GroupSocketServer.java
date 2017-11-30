@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.gmail.bicycle.stud.model.Group;
-
 public class GroupSocketServer extends Thread {
 	static int connections = 0;
 
@@ -60,7 +58,7 @@ public class GroupSocketServer extends Thread {
 					+ System.lineSeparator()
 					+ "<head>"
 					+ System.lineSeparator()
-					+ "<title>System Info</title>"
+					+ "<title>Group Info</title>"
 					+ System.lineSeparator()
 					+ "<meta charset='utf-8'>"
 					+ System.lineSeparator()
@@ -82,7 +80,7 @@ public class GroupSocketServer extends Thread {
 					+ System.lineSeparator()
 					+ "<p>List of Group methods:</p>"
 					+ System.lineSeparator()
-					+ generateTable(Group.class)
+					+ generateTable(Main.classToInvoke)
 					+"<br>"
 					+ System.lineSeparator()
 					+ "</body>"
@@ -92,7 +90,7 @@ public class GroupSocketServer extends Thread {
 			return result;
 	}
 
-	private String generateTable(Class<Group> clazz) {
+	private String generateTable(Class<?> clazz) {
 		this.methods = ReflectionHandler.processFields(clazz);
 		StringBuilder sb = new StringBuilder("<table>");
 		sb.append(System.lineSeparator());

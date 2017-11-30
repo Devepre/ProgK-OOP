@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.Map;
-
-import com.gmail.bicycle.stud.model.Group;
 
 public class RequestHandler implements Runnable {
 	private Socket socket;
@@ -82,7 +79,7 @@ public class RequestHandler implements Runnable {
 	private String generateTable(String arg) {
 		String methodResult = "";
 		String methodName = null;
-		Class<?> clazz = Group.class;
+		Class<?> clazz = Main.classToInvoke;
 		try {
 			Object group = clazz.newInstance();
 			methodName = this.methods.get(Integer.parseInt(arg));
@@ -92,7 +89,7 @@ public class RequestHandler implements Runnable {
 			Object obj = method.invoke(group, null);
 			methodResult = obj.toString();
 		} catch (Exception e) {
-			methodResult = "can't invoke this method";
+			methodResult = "can't invoke or get result of this method";
 			e.printStackTrace();
 		}
 		
@@ -102,7 +99,7 @@ public class RequestHandler implements Runnable {
 				+ System.lineSeparator()
 				+ "<head>"
 				+ System.lineSeparator()
-				+ "<title>System Info</title>"
+				+ "<title>Method invokation result</title>"
 				+ System.lineSeparator()
 				+ "<meta charset='utf-8'>"
 				+ System.lineSeparator()
